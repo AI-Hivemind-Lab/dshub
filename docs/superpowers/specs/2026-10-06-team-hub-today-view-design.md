@@ -9,8 +9,7 @@
 A web hub for the Anduin Digitization Squad that answers, for any member and any date:
 *"What am I working on, where is it discussed, and where are the files?"*
 
-v1 is an always-on, visual version of the `clawl` skill (`clawl/SKILL.md`), which is the
-reference for the business rules. The hub is the first of several planned sub-projects
+The hub is the first of several planned sub-projects
 (later: catch-up digests, cross-source search, team view); only the "today" view is in scope here.
 
 ## 2. Scope
@@ -47,7 +46,7 @@ Browser ──Google SSO──▶ Next.js app (Dokploy)
                           ├─ app/today      server-rendered "today" page
                           ├─ app/api/health health check
                           ├─ lib/clickup/   typed ClickUp REST v2 client
-                          ├─ lib/prep/      pure business rules (from clawl)
+                          ├─ lib/prep/      pure business rules
                           └─ lib/cache/     in-memory TTL cache
                                 │
                                 ▼
@@ -144,7 +143,8 @@ Server logs record the endpoint, status and duration for every ClickUp error.
   unlabeled); image filtering.
 - **`lib/clickup`:** recorded JSON fixtures, with no live calls in CI; covers pagination and 429 retry.
 - **Page render:** mocked client; empty, normal and partial-failure states.
-- **Acceptance (manual):** for the same date, the hub lists the same fund tasks and Slack links as a `clawl` run.
+- **Acceptance (manual):** for a few sample dates, the hub's fund tasks and Slack links match what a
+  person finds by checking ClickUp directly.
 
 ## 12. Future (not v1)
 
