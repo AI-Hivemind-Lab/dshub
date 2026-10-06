@@ -72,6 +72,9 @@ export function createDayViewService(deps: DayViewDeps) {
       dayCache.set(key, result);
       return result;
     } catch (err) {
+      if (!(err instanceof ClickUpError)) {
+        console.error(JSON.stringify({ msg: "day_view_error", userId, date, error: String(err) }));
+      }
       const error = describeError(err);
       const previous = dayCache.peek(key);
       if (previous?.view) return { ...previous, stale: true, error };

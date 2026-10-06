@@ -83,6 +83,18 @@ describe("getDayView", () => {
     const { service } = setup({ listUserTasks: async () => { throw new ClickUpError(503, "/team/T1/task", "down"); } });
     const result = await service.getDayView(42, DATE, { refresh: false });
     expect(result).toMatchObject({ view: null, stale: false, error: "Couldn't reach ClickUp (unavailable)" });
+    expect(vi.mocked(console.error)).not.toHaveBeenCalled();
+  });
+
+  it("logs non-ClickUp errors in day-view service", async () => {
+    const { service } = setup({ listUserTasks: async () => { throw new TypeError("bad shape"); } });
+    const result = await service.getDayView(42, DATE, { refresh: false });
+    expect(result).toMatchObject({ view: null, stale: false, error: "Couldn't reach ClickUp (unavailable)" });
+    expect(vi.mocked(console.error)).toHaveBeenCalledWith(
+      expect.stringContaining("day_view_error"),
+    );
+    const calls = vi.mocked(console.error).mock.calls;
+    expect(calls[0][0]).toContain("bad shape");
   });
 
   it("serves a stale view when ClickUp fails after the cache expires", async () => {
