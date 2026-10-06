@@ -83,7 +83,9 @@ convert with `ms → +7h → calendar date`.
   parent becomes its own group.
 - **`parseSlackLinks(description)`**: extract Slack URLs from the parent description, classify
   them as **CS** or **Testing** by the label text preceding the link (e.g. "CS channel", "Testing
-  channel"), and keep a `thread_ts` deep link if present. A missing link yields `null` (rendered as "not found").
+  channel"), and keep a `thread_ts` deep link if present. Links with no recognizable label fill the
+  empty slots in order (CS first, then Testing). Duplicate URLs are ignored. A missing link yields
+  `null` (rendered as "not found").
 - **`filterAttachments(list)`**: drop attachments whose MIME type is `image/*` or whose extension is an
   image type, and return `{ files, hiddenImageCount }`.
 
