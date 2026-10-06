@@ -1,0 +1,56 @@
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --text: #1d1d1b;
+  --muted: #6b6b66;
+  --border: #e3e3de;
+  --accent: #2f5bd3;
+  --error-bg: #fdecec;
+  --error-text: #8a1c1c;
+  --notice-bg: #fff6dc;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --surface: #20201e;
+    --text: #ecece8;
+    --muted: #a3a39d;
+    --border: #34342f;
+    --accent: #8aa8ff;
+    --error-bg: #3a1d1d;
+    --error-text: #ffb4b4;
+    --notice-bg: #3a3320;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+a { color: var(--accent); }
+.page { max-width: 860px; margin: 0 auto; padding: 16px; }
+.topbar { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.brand { font-weight: 700; }
+.user { margin-left: auto; color: var(--muted); }
+.link-button { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
+.date-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0 4px; }
+.date-nav a { text-decoration: none; }
+.today-tag { font-size: 12px; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 0 8px; }
+.date-form { display: flex; gap: 6px; }
+.refresh { margin-left: auto; }
+.updated { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+.banner { padding: 8px 12px; border-radius: 6px; }
+.banner.error { background: var(--error-bg); color: var(--error-text); }
+.banner.notice { background: var(--notice-bg); }
+.summary { color: var(--muted); }
+.empty { padding: 24px 0; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+.card h2 { font-size: 17px; margin: 0 0 6px; }
+.card-error { color: var(--error-text); margin: 4px 0; }
+.subtasks { margin: 4px 0; padding-left: 18px; }
+.dates { color: var(--muted); font-size: 13px; }
+.slack { display: flex; flex-wrap: wrap; gap: 16px; margin: 6px 0; }
+.missing { color: var(--muted); }
+.files { margin: 6px 0 0; overflow-wrap: anywhere; }
