@@ -79,6 +79,7 @@ describe("listMembers", () => {
   it("throws if the team is missing", async () => {
     const { client } = setup(json({ teams: [] }));
     await expect(client.listMembers()).rejects.toMatchObject({ status: 404 });
+    expect(console.error).toHaveBeenCalledWith(expect.stringContaining("clickup_error"));
   });
 });
 
@@ -100,6 +101,24 @@ describe("errors and retries", () => {
     expect(err).toBeInstanceOf(ClickUpError);
     expect(err.status).toBe(401);
     expect(err.endpoint).toBe("/task/fund1?include_markdown_description=true");
+  });
+
+  it("passes an abort signal so requests time out", async () => {
+    const { client, fetchFn } = setup(json(fund1));
+    await client.getTask("fund1");
+    const [, init] = fetchFn.mock.calls[0] as unknown as [string, RequestInit];
+    expect(init.signal).toBeInstanceOf(AbortSignal);
+  });
+
+  it("wraps a non-JSON 200 response as a ClickUpError", async () => {
+    const { client } = setup(
+      new Response("<html>proxy error</html>", { status: 200, headers: { "content-type": "text/html" } }),
+    );
+    const err = await client.getTask("fund1").catch((e) => e);
+    expect(err).toBeInstanceOf(ClickUpError);
+    expect(err.status).toBe(200);
+    expect(err.message).toContain("Invalid JSON");
+    expect(console.error).toHaveBeenCalledWith(expect.stringContaining("clickup_error"));
   });
 
   it("wraps network errors as status 0", async () => {

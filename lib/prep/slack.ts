@@ -6,7 +6,7 @@ type Kind = "cs" | "testing";
 
 function classify(label: string): Kind | null {
   const l = label.toLowerCase();
-  if (/test|qa/.test(l)) return "testing";
+  if (/\btest|\bqa\b/.test(l)) return "testing";
   if (/\bcs\b|customer|client|support/.test(l)) return "cs";
   return null;
 }

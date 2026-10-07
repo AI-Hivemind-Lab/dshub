@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
+import { ClickUpError } from "@/lib/clickup/client";
 import { describeError, type DayViewResult } from "@/lib/hub/day-view";
 import { getHub } from "@/lib/hub/instance";
 import { isValidDate, todayLocal } from "@/lib/prep/dates";
@@ -31,6 +32,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
     if (!member) unmappedEmail = email;
     else result = await hub.dayViews.getDayView(member.id, date, { refresh: params.refresh === "1" });
   } catch (err) {
+    if (!(err instanceof ClickUpError)) console.error(JSON.stringify({ msg: "today_page_error", error: String(err) }));
     result = { view: null, fetchedAt: Date.now(), stale: false, error: describeError(err) };
   }
 

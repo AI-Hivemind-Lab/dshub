@@ -48,4 +48,16 @@ describe("parseSlackLinks", () => {
   it("does not treat words like 'docs' as CS", () => {
     expect(parseSlackLinks(`Docs and testing: ${C222}`).testing?.url).toBe(C222);
   });
+
+  it("does not treat 'Latest' as a testing label", () => {
+    const result = parseSlackLinks(`Latest CS update: ${C111}`);
+    expect(result.cs?.url).toBe(C111);
+    expect(result.testing).toBeNull();
+  });
+
+  it("does not treat 'attestation' as a testing label", () => {
+    const result = parseSlackLinks(`LP attestation thread: ${C222}`);
+    expect(result.cs?.url).toBe(C222);
+    expect(result.testing).toBeNull();
+  });
 });

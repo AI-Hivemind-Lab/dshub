@@ -20,5 +20,5 @@ fund task, with the CS/testing Slack links and attachments for each fund task.
 1. Create an Application from this git repo with build type **Dockerfile**.
 2. Set environment variables from `.env.example`. Set `AUTH_URL` to the public URL (e.g. `https://hub.example.com`).
 3. In Google Cloud Console, add `<AUTH_URL>/api/auth/callback/google` as a redirect URI.
-4. Container port: `3000`. Health check path: `/api/health`.
+4. Container port: `3000`. The image defines a Docker HEALTHCHECK against `/api/health`, so no Dokploy health-check setting is needed.
 5. Deploy. Caches are in memory, so restarts only cost one slower first load.

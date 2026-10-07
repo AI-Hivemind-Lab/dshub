@@ -3,6 +3,7 @@ import type { ClickUpMember, ClickUpTask } from "./types";
 const BASE_URL = "https://api.clickup.com/api/v2";
 const MAX_PAGES = 20;
 const PAGE_SIZE = 100;
+const REQUEST_TIMEOUT_MS = 10_000;
 
 export class ClickUpError extends Error {
   constructor(
@@ -56,6 +57,7 @@ export function createClickUpClient(opts: ClickUpClientOptions): ClickUpClient {
       res = await fetchFn(BASE_URL + endpoint, {
         headers: { Authorization: opts.token },
         cache: "no-store",
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       });
     } catch (err) {
       logError(endpoint, 0, now() - started);
@@ -69,7 +71,12 @@ export function createClickUpClient(opts: ClickUpClientOptions): ClickUpClient {
       logError(endpoint, res.status, now() - started);
       throw new ClickUpError(res.status, endpoint, `ClickUp ${res.status} on ${endpoint}`);
     }
-    return (await res.json()) as T;
+    try {
+      return (await res.json()) as T;
+    } catch {
+      logError(endpoint, res.status, now() - started);
+      throw new ClickUpError(res.status, endpoint, `Invalid JSON from ClickUp on ${endpoint}`);
+    }
   }
 
   return {
@@ -79,7 +86,10 @@ export function createClickUpClient(opts: ClickUpClientOptions): ClickUpClient {
       };
       const data = await request<TeamsResponse>("/team");
       const team = data.teams.find((t) => String(t.id) === opts.teamId);
-      if (!team) throw new ClickUpError(404, "/team", `Team ${opts.teamId} not found for this token`);
+      if (!team) {
+        logError("/team", 404, 0);
+        throw new ClickUpError(404, "/team", `Team ${opts.teamId} not found for this token`);
+      }
       return team.members.map(({ user }) => ({ id: user.id, username: user.username, email: user.email }));
     },
 
