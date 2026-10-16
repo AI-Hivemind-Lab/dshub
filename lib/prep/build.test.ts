@@ -1,18 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { THREAD_URL, TESTING_URL, fund1, subChecklist, subFormSupport } from "@/lib/clickup/test-fixtures";
+import { THREAD_URL, TESTING_URL, fund1, fund2, subChecklist, subFormSupport, subUi } from "@/lib/clickup/test-fixtures";
 import { buildFundGroup, toSubTask } from "./build";
 
 const OFFSET = 420;
 
 describe("toSubTask", () => {
-  it("converts timestamps to local dates", () => {
-    expect(toSubTask(subFormSupport, OFFSET)).toEqual({
+  it("converts timestamps and maps status, priority and estimate", () => {
+    expect(toSubTask(subFormSupport, OFFSET, "Fortress Lending Fund V (Unlevered)")).toEqual({
       id: "sub1",
-      name: "Form Support",
+      name: "Fortress Lending Fund V (Unlevered) - Form Support",
+      shortName: "Form Support",
       url: "https://app.clickup.com/t/sub1",
       startDate: "2026-06-11",
       dueDate: "2026-06-12",
+      status: { label: "in progress", color: "#4194f6" },
+      priority: { label: "High", color: "#f8ae00", rank: 2 },
+      estimateMs: 5_400_000,
     });
+  });
+
+  it("uses nulls for missing status, priority and estimate", () => {
+    const sub = toSubTask({ ...subUi, status: undefined }, OFFSET);
+    expect(sub.status).toBeNull();
+    expect(sub.priority).toBeNull();
+    expect(sub.estimateMs).toBeNull();
+    expect(sub.shortName).toBe("UI Change");
   });
 });
 
@@ -48,5 +60,33 @@ describe("buildFundGroup", () => {
       loadError: true,
     });
     expect(group.subtasks).toHaveLength(1);
+  });
+
+  it("adds client, list, facts, notes and top priority", () => {
+    const group = buildFundGroup({ parentId: "fund1", members: [subFormSupport, subChecklist] }, fund1, OFFSET);
+    expect(group.client).toBe("Fortress");
+    expect(group.listName).toBe("Fortress Lending Fund V - Subscription Booklet");
+    expect(group.facts.map((f) => f.label)).toEqual([
+      "Target delivery", "Expected launch", "Server", "Structure", "Jurisdictions", "Subdocs",
+    ]);
+    expect(group.notes).toBeNull(); // fund1's description is only Slack links
+    expect(group.topPriority).toEqual({ label: "Urgent", color: "#f50000", rank: 1 });
+    expect(group.subtasks.find((s) => s.id === "sub1")?.shortName).toBe("Form Support");
+  });
+
+  it("hides a hidden folder and keeps non-Slack description text as notes", () => {
+    const group = buildFundGroup({ parentId: "fund2", members: [subUi] }, fund2, OFFSET);
+    expect(group.client).toBeNull();
+    expect(group.listName).toBe("Gilde Healthcare");
+    expect(group.notes).toBe("Kickoff notes only.");
+    expect(group.facts).toEqual([]);
+    expect(group.topPriority).toBeNull();
+  });
+
+  it("fills empty extras for a load-error group but keeps top priority", () => {
+    const group = buildFundGroup({ parentId: "fund9", members: [subChecklist] }, null, OFFSET);
+    expect(group).toMatchObject({ client: null, listName: null, facts: [], notes: null, loadError: true });
+    expect(group.topPriority?.rank).toBe(1);
+    expect(group.subtasks[0].shortName).toBe("Checklist Fix");
   });
 });

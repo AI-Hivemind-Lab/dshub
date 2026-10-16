@@ -8,7 +8,7 @@ import { TodayScreen } from "./today-screen";
 
 export const dynamic = "force-dynamic";
 
-type SearchParams = Promise<{ date?: string; refresh?: string }>;
+type SearchParams = Promise<{ date?: string; refresh?: string; fund?: string }>;
 
 export default async function TodayPage({ searchParams }: { searchParams: SearchParams }) {
   const session = await auth();
@@ -41,15 +41,17 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
     await signOut({ redirectTo: "/" });
   }
 
+  const userArea = (
+    <div className="user-area">
+      <span className="user">{session?.user?.name ?? email}</span>
+      <form action={signOutAction}>
+        <button type="submit" className="link-button">Sign out</button>
+      </form>
+    </div>
+  );
+
   return (
     <main className="page">
-      <header className="topbar">
-        <span className="brand">Hub</span>
-        <span className="user">{session?.user?.name ?? email}</span>
-        <form action={signOutAction}>
-          <button type="submit" className="link-button">Sign out</button>
-        </form>
-      </header>
       <TodayScreen
         date={date}
         today={today}
@@ -57,6 +59,8 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
         result={result}
         unmappedEmail={unmappedEmail}
         nowMs={Date.now()}
+        initialFundId={params.fund ?? null}
+        userArea={userArea}
       />
     </main>
   );
