@@ -23,6 +23,6 @@ describe("shortSubtaskName", () => {
     expect(shortSubtaskName("Fund A - ", "Fund A")).toBe("Fund A - ");
   });
   it("keeps the full name without a parent", () => {
-    expect(shortSubtaskName("Fortress Lending Fund V (Unlevered) - Form Support", null)).toBe("Fortress Lending Fund V (Unlevered) - Form Support");
+    expect(shortSubtaskName("Form Support", null)).toBe("Form Support");
   });
 });

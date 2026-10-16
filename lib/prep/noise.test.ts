@@ -24,7 +24,7 @@ describe("isNoise", () => {
     }
   });
   it("keeps real work", () => {
-    expect(isNoise("Fortress Lending Fund V (Unlevered) - Form Support", DEFAULT_NOISE_PATTERNS)).toBe(false);
+    expect(isNoise("Form Support", DEFAULT_NOISE_PATTERNS)).toBe(false);
     expect(isNoise("Checklist Fix", DEFAULT_NOISE_PATTERNS)).toBe(false);
   });
 });
