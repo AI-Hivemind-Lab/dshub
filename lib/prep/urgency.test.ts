@@ -28,9 +28,9 @@ describe("groupByUrgency", () => {
     const groups = groupByUrgency(
       [
         fundDue("w2", "Alpha week", "2026-06-15"),
-        fundDue("t2", "alpha", D),
-        fundDue("w1", "Zeta week", "2026-06-13"),
         fundDue("t1", "Beta", D),
+        fundDue("w1", "Zeta week", "2026-06-13"),
+        fundDue("t2", "alpha", D),
       ],
       D,
     );
