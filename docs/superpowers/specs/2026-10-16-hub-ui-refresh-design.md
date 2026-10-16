@@ -49,6 +49,8 @@ v1 said "task status is never displayed". This spec **reverses that**: sub-task 
 - **Banners:** full width, between the top bar and the panes.
 - **Panes:** at ≥ 900px wide, the list is 300px, sticky, with its own scroll, and the detail panel fills the rest. Below 900px they stack (list on top, then detail).
 - **Empty day:** the existing empty-state copy, centred, in place of both panes.
+- The v1 summary line ("N sub-tasks · M fund tasks") is removed; group headings carry the counts.
+- Missing channel links render as quiet chips: "💬 No CS channel" and "🧪 No testing channel". No files and no hidden images renders "No attachments".
 
 ## 3. Behaviour
 
@@ -129,9 +131,9 @@ These are read from the parent task's `custom_fields`, **matched by field ID**:
 |---|---|---|---|
 | Target delivery | 📕 [DO] Initial Target Delivery Date | `d6383cc7-7921-4655-b0eb-bc5dbbc8ef23` | date (ms string) → local short date "Oct 21" (UTC+7) |
 | Expected launch | 📕 [GTM] Expected Launch Date | `cf3b66ac-573c-4f52-8c62-323638c11967` | date → "Oct 5" |
-| Server | 📕 [GTM] Server | `ac4b808b-9094-4219-ac14-41df4f0eac81` | labels (array of option IDs) → option names joined ", " |
-| Structure | 🔍 [DS] Fund Structure | `3ab4b383-df56-40f2-9a84-4a00e7d9adc6` | drop_down (value = option `orderindex`) → option name |
-| Jurisdictions | 🔍 [DS] Fund jurisdictions | `91fe79b5-8500-405e-820e-4c3c1db3532b` | labels → names joined ", " |
+| Server | 📕 [GTM] Server | `ac4b808b-9094-4219-ac14-41df4f0eac81` | labels (array of option IDs) → option `label`s joined ", " |
+| Structure | 🔍 [DS] Fund Structure | `3ab4b383-df56-40f2-9a84-4a00e7d9adc6` | drop_down (value = option `orderindex`, a number) → option `name` |
+| Jurisdictions | 🔍 [DS] Fund jurisdictions | `91fe79b5-8500-405e-820e-4c3c1db3532b` | labels → option `label`s joined ", " |
 | Subdocs | 🔍 [DS] Number of subdocs | `d35773c1-5023-41cf-acce-86db37cd507b` | number → as text |
 
 Rules:
@@ -160,19 +162,20 @@ There are no changes to the ClickUp client's requests, the caching or the day-vi
 
 | Unit | Change |
 |---|---|
-| `lib/clickup/types.ts` | Add optional fields to `ClickUpTask`: `status?: { status: string; color: string }`, `priority?: { priority: string; color: string } \| null`, `time_estimate?: number \| null`, `custom_fields?: ClickUpCustomField[]`, `folder?: { name: string; hidden?: boolean }`, `list?: { name: string }`. Add `ClickUpCustomField { id; name; type; value?; type_config?: { options?: { id; name; orderindex }[] } }`. |
+| `lib/clickup/types.ts` | Add optional fields to `ClickUpTask`: `status?: { status: string; color: string }`, `priority?: { priority: string; color: string } \| null`, `time_estimate?: number \| null`, `custom_fields?: ClickUpCustomField[]`, `folder?: { name: string; hidden?: boolean }`, `list?: { name: string }`. Add `ClickUpCustomField { id; name; type; value?; type_config?: { options?: { id; name?; label?; orderindex }[] } }`. In the REST API, `labels` options carry their text in `label` and `drop_down` options in `name` (verified 2026-10-16); the data assumptions above were also verified that day. |
 | `lib/prep/types.ts` | `SubTask` gains `shortName`, `status: { label; color } \| null`, `priority: { label; color; rank } \| null` and `estimateMs: number \| null`. `FundGroup` gains `client: string \| null`, `listName: string \| null`, `facts: FundFact[]`, `notes: string \| null` and `topPriority: { label; color } \| null`. Add `FundFact { label: string; value: string }` and `UrgencyGroup { key: "today" \| "week" \| "later"; label: string; funds: FundGroup[] }`. |
 | `lib/prep/facts.ts` (new) | `FACT_FIELDS` constant; `extractFundFacts(parent, offsetMin): FundFact[]`. |
 | `lib/prep/notes.ts` (new) | `extractNotes(text): string \| null`; `toNoteParts(notes): Array<{ text: string } \| { label: string; url: string }>`. |
 | `lib/prep/names.ts` (new) | `shortSubtaskName(name, parentName): string`. |
 | `lib/prep/format.ts` (new) | `formatEstimate(ms): string`. |
-| `lib/prep/urgency.ts` (new) | `groupByUrgency(funds, date): UrgencyGroup[]`; `topPriority(subtasks)`. |
+| `lib/prep/urgency.ts` (new) | `groupByUrgency(funds, date): UrgencyGroup[]`. |
+| `lib/prep/priority.ts` (new) | `toPriority(raw)`, `topPriority(subtasks)`, `safeColor(c)` (only `#hex` colours pass; others fall back to the muted colour). |
 | `lib/prep/build.ts` | Fill the new `SubTask` and `FundGroup` fields from the raw tasks. |
 | `lib/hub/fund-param.ts` (new) | `withFundParam(href, fundId): string`; `pickSelectedFund(groups, requested): string \| null`. |
 | `app/today/fund-detail.tsx` (new) | Pure view of one `FundGroup`: header, facts, sub-task rows, channels, files, notes, load-error state. |
-| `app/today/fund-browser.tsx` (new, `"use client"`) | Holds `selectedId` state (initial value from the server). Renders the urgency-grouped list and `<FundDetail>`. Updates the URL on select. |
-| `app/today/today-screen.tsx` | Becomes the shell: top bar pieces, banners, `<FundBrowser>` or the empty state. Date-nav links carry `fund`. |
-| `app/today/page.tsx` | Reads `searchParams.fund` and passes it through. The top bar is restyled. |
+| `app/today/fund-browser.tsx` (new) | Controlled view: renders the urgency-grouped list and `<FundDetail>` for `selectedId`; calls `onSelect(id)` on click. |
+| `app/today/today-screen.tsx` (`"use client"`) | The single client boundary. Holds `selectedId` state (initial value from `pickSelectedFund`), so the top-bar date links and `<FundBrowser>` share it. Renders the top bar (brand, date nav, updated, `userArea` slot), banners, and `<FundBrowser>` or the empty state. On select it updates `?fund=` with `history.replaceState` and drops a sticky `refresh=1`. |
+| `app/today/page.tsx` | Reads `searchParams.fund` and passes it through. It builds the `userArea` node (name plus the Sign out form with its server action) and passes it to `TodayScreen`. |
 | `app/globals.css` | Rewritten with the §4 tokens and layout. |
 
 ## 7. Testing
