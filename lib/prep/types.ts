@@ -44,3 +44,8 @@ export interface DayView {
   subtaskCount: number;
   groups: FundGroup[];
 }
+
+export interface FundFact {
+  label: string;
+  value: string;
+}

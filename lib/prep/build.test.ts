@@ -8,7 +8,7 @@ describe("toSubTask", () => {
   it("converts timestamps to local dates", () => {
     expect(toSubTask(subFormSupport, OFFSET)).toEqual({
       id: "sub1",
-      name: "Form Support",
+      name: "Fortress Lending Fund V (Unlevered) - Form Support",
       url: "https://app.clickup.com/t/sub1",
       startDate: "2026-06-11",
       dueDate: "2026-06-12",
