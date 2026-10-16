@@ -14,8 +14,8 @@ const fortress: FundGroup = {
   name: "Fortress Lending Fund V (Unlevered)",
   url: "https://app.clickup.com/t/fund1",
   subtasks: [
-    { id: "sub2", name: "Checklist Fix", url: "https://app.clickup.com/t/sub2", startDate: "2026-06-08", dueDate: "2026-06-11" },
-    { id: "sub1", name: "Form Support", url: "https://app.clickup.com/t/sub1", startDate: "2026-06-11", dueDate: "2026-06-11" },
+    { id: "sub2", name: "Checklist Fix", shortName: "Checklist Fix", url: "https://app.clickup.com/t/sub2", startDate: "2026-06-08", dueDate: "2026-06-11", status: null, priority: null, estimateMs: null },
+    { id: "sub1", name: "Form Support", shortName: "Form Support", url: "https://app.clickup.com/t/sub1", startDate: "2026-06-11", dueDate: "2026-06-11", status: null, priority: null, estimateMs: null },
   ],
   slack: {
     cs: { url: "https://anduin.slack.com/archives/C111/p1717000000000100?thread_ts=1", isThread: true },
@@ -24,6 +24,11 @@ const fortress: FundGroup = {
   files: [{ title: "SubDoc_v3.pdf", url: "https://files/SubDoc_v3.pdf" }],
   hiddenImageCount: 2,
   loadError: false,
+  client: null,
+  listName: null,
+  facts: [],
+  notes: null,
+  topPriority: null,
 };
 
 const result = (groups: FundGroup[], extra: Partial<DayViewResult> = {}): DayViewResult => ({
