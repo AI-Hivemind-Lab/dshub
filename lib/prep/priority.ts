@@ -2,7 +2,7 @@ import type { ClickUpTask } from "@/lib/clickup/types";
 import type { Priority, SubTask } from "./types";
 
 const RANK: Record<string, number> = { urgent: 1, high: 2, normal: 3, low: 4 };
-const FALLBACK_COLOR = "#8a8478";
+const FALLBACK_COLOR = "#6b655a";
 
 /** Only plain hex colours from ClickUp reach inline styles. */
 export function safeColor(color: string | null | undefined): string {

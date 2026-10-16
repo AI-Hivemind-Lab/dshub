@@ -22,7 +22,7 @@ const result = (groups: FundGroup[], extra: Partial<DayViewResult> = {}): DayVie
   ...extra,
 });
 
-const funds = [due("f1", "Today fund", D), due("f2", "Week fund", "2026-06-14"), due("f3", "Later fund", "2026-06-30")];
+const funds = [due("f3", "Later fund", "2026-06-30"), due("f2", "Week fund", "2026-06-14"), due("f1", "Today fund", D)];
 
 const base: TodayScreenProps = {
   date: D,

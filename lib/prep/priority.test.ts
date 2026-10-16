@@ -5,8 +5,8 @@ describe("safeColor", () => {
   it("passes hex colours and replaces anything else", () => {
     expect(safeColor("#f8ae00")).toBe("#f8ae00");
     expect(safeColor("#FFF")).toBe("#FFF");
-    expect(safeColor("red; background:url(x)")).toBe("#8a8478");
-    expect(safeColor(null)).toBe("#8a8478");
+    expect(safeColor("red; background:url(x)")).toBe("#6b655a");
+    expect(safeColor(null)).toBe("#6b655a");
   });
 });
 

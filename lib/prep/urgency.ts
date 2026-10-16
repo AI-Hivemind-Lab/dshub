@@ -28,7 +28,7 @@ export function groupByUrgency(funds: FundGroup[], date: string): UrgencyGroup[]
         const da = a.due ?? "9999-12-31";
         const db = b.due ?? "9999-12-31";
         if (da !== db) return da < db ? -1 : 1;
-        return a.fund.name.localeCompare(b.fund.name, undefined, { sensitivity: "base" });
+        return a.fund.name.localeCompare(b.fund.name, "en", { sensitivity: "base" });
       })
       .map((e) => e.fund),
   })).filter((g) => g.funds.length > 0);

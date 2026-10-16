@@ -1,10 +1,11 @@
 :root {
+  color-scheme: light dark;
   --bg: #f6f4ef;
   --sidebar: #efece5;
   --surface: #ffffff;
   --surface-2: #f6f4ef;
   --text: #2b2a27;
-  --muted: #8a8478;
+  --muted: #6b655a;
   --border: #e2ddd2;
   --accent: #3451b2;
   --chip-cs-bg: #e3ecff;
@@ -14,7 +15,7 @@
   --chip-file-bg: #f0eee9;
   --chip-file-fg: #4a463f;
   --chip-off-bg: #f0eee9;
-  --chip-off-fg: #b0aa9f;
+  --chip-off-fg: #6f695e;
   --urg-today: #e5534b;
   --urg-week: #e0a33b;
   --urg-later: #c4bfb4;
@@ -44,7 +45,7 @@
     --chip-file-bg: #2f2d29;
     --chip-file-fg: #d6d1c7;
     --chip-off-bg: #2f2d29;
-    --chip-off-fg: #7a756b;
+    --chip-off-fg: #9a9488;
     --urg-today: #f0766f;
     --urg-week: #e8b65e;
     --urg-later: #6f6a61;
@@ -115,7 +116,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   color: inherit; font: inherit; cursor: pointer;
 }
 .fund-item:hover { background: color-mix(in srgb, var(--surface) 60%, transparent); }
-.fund-item.is-selected { background: var(--surface); box-shadow: var(--shadow); }
+.fund-item.is-selected { background: var(--surface); box-shadow: var(--shadow), inset 3px 0 0 var(--accent); }
 .urgency-dot { grid-row: span 2; align-self: start; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; }
 .urgency-today { background: var(--urg-today); }
 .urgency-week { background: var(--urg-week); }
@@ -149,8 +150,9 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   --status: var(--muted);
   padding: 2px 8px; border-radius: 999px; white-space: nowrap;
   font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
-  color: var(--status); background: color-mix(in srgb, var(--status) 15%, transparent);
+  color: color-mix(in srgb, var(--status) 35%, var(--text)); background: color-mix(in srgb, var(--status) 15%, transparent);
 }
+.priority, .fund-item-priority { color: color-mix(in srgb, var(--prio, var(--muted)) 35%, var(--text)); }
 .priority { font-size: 11.5px; font-weight: 600; white-space: nowrap; }
 .estimate, .dates { font-size: 12px; color: var(--muted); white-space: nowrap; }
 .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }

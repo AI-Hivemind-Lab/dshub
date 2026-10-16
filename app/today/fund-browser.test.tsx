@@ -33,6 +33,7 @@ describe("FundBrowser", () => {
     const html = render(<FundBrowser groups={groups} selectedId="f1" onSelect={() => {}} />);
     expect(html).toContain("2 sub-tasks");
     expect(html).toContain(" · ⚑ High");
+    expect(html).toContain('class="fund-item-priority" style="--prio:#f8ae00"');
     expect(html).toContain(" · ⚠");
     expect(html).toContain('title="Bain Capital GSS III"');
   });

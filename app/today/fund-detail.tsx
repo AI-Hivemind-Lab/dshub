@@ -56,7 +56,7 @@ function SubTaskRow({ sub }: { sub: SubTask }) {
         </span>
       )}
       {sub.priority && (
-        <span className="priority" style={{ color: sub.priority.color }}>
+        <span className="priority" style={{ "--prio": sub.priority.color } as CSSProperties}>
           ⚑ {sub.priority.label}
         </span>
       )}

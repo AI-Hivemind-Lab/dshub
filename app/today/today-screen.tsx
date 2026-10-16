@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import type { DayViewResult } from "@/lib/hub/day-view";
-import { pickSelectedFund, withFundParam } from "@/lib/hub/fund-param";
+import { pickSelectedFund, selectionHref, withFundParam } from "@/lib/hub/fund-param";
 import { addDays, formatLongDate } from "@/lib/prep/dates";
 import { groupByUrgency } from "@/lib/prep/urgency";
 import { FundBrowser } from "./fund-browser";
@@ -52,9 +52,7 @@ export function TodayScreen(props: TodayScreenProps) {
 
   function handleSelect(id: string) {
     setSelectedId(id);
-    const url = new URL(window.location.href);
-    url.searchParams.delete("refresh");
-    window.history.replaceState(null, "", withFundParam(`${url.pathname}${url.search}`, id));
+    window.history.replaceState(null, "", selectionHref(window.location.href, id));
   }
 
   return (

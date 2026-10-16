@@ -46,6 +46,7 @@ v1 said "task status is never displayed". This spec **reverses that**: sub-task 
 ```
 
 - **Top bar:** brand; date nav (◀ date ▶, a date-picker form, a "today" chip when viewing today, otherwise a "Jump to today" link); "updated N min ago" (+ " · stale" when stale) and ⟳ Refresh; user name and Sign out.
+- Refresh sits in the date nav, before the "updated N min ago" label.
 - **Banners:** full width, between the top bar and the panes.
 - **Panes:** at ≥ 900px wide, the list is 300px, sticky, with its own scroll, and the detail panel fills the rest. Below 900px they stack (list on top, then detail).
 - **Empty day:** the existing empty-state copy, centred, in place of both panes.
@@ -92,17 +93,17 @@ All colours are CSS variables in `app/globals.css`, with a warm dark theme under
 | `--bg` | `#f6f4ef` | `#1c1b19` |
 | `--sidebar` | `#efece5` | `#24221f` |
 | `--surface` | `#ffffff` | `#2b2926` |
-| `--text` / `--muted` | `#2b2a27` / `#8a8478` | `#ece9e2` / `#9d978b` |
+| `--text` / `--muted` | `#2b2a27` / `#6b655a` | `#ece9e2` / `#9d978b` |
 | `--chip-cs-bg` / `--chip-cs-fg` | `#e3ecff` / `#3451b2` | `#25304d` / `#a9bcf5` |
 | `--chip-test-bg` / `--chip-test-fg` | `#e6f4ea` / `#256a3a` | `#1f3527` / `#9fd3ae` |
-| `--chip-off-bg` / `--chip-off-fg` | `#f0eee9` / `#b0aa9f` | `#2f2d29` / `#7a756b` |
+| `--chip-off-bg` / `--chip-off-fg` | `#f0eee9` / `#6f695e` | `#2f2d29` / `#9a9488` |
 | `--urg-today` / `--urg-week` / `--urg-later` | `#e5534b` / `#e0a33b` / `#c4bfb4` | `#f0766f` / `#e8b65e` / `#6f6a61` |
 
 - **Type:** system font stack. Fund title 17px/600, body 13px, section labels 10px uppercase with letter-spacing, muted.
 - **Shape:** panels 14px radius, rows and fact tiles 10px, chips fully rounded. Soft shadow `0 1px 4px rgba(0,0,0,.06)`.
-- **Selected list item:** `--surface` background plus a soft shadow.
-- **Status pill:** the ClickUp status colour as text, on the same colour at about 15% opacity.
-- **Priority flag:** "⚑ <Priority>" in ClickUp's priority colour.
+- **Selected list item:** `--surface` background plus a soft shadow. It also shows a 3px accent bar on its left edge.
+- **Status pill:** the text is the ClickUp status colour mixed 35% toward `--text` (`color-mix`), on a tint of that colour at about 15% opacity, so it stays readable in both themes.
+- **Priority flag:** "⚑ <Priority>" in ClickUp's priority colour, likewise mixed 35% toward `--text` for readability in both themes.
 - **Focus:** a visible focus outline on every interactive element. List items are `<button>` elements.
 - **External links:** `target="_blank" rel="noreferrer"`, marked with ↗.
 - **Fact grid:** 4 columns at ≥ 900px, 2 columns below.

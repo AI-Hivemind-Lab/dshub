@@ -20,6 +20,7 @@ describe("FundDetail", () => {
     expect(html).toContain('style="--status:#4194f6"');
     expect(html).toContain("in progress");
     expect(html).toContain("⚑ High");
+    expect(html).toContain('style="--prio:#f8ae00"');
     expect(html).toContain("⏱ 1h 30m");
     expect(html).toContain("due Jun 11");
     expect(html).toContain("💬 CS channel (thread) ↗");

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { UrgencyGroup } from "@/lib/prep/types";
 import { FundDetail } from "./fund-detail";
 
@@ -34,7 +35,7 @@ export function FundBrowser({ groups, selectedId, onSelect }: FundBrowserProps) 
                       <span className="fund-item-meta">
                         {plural(fund.subtasks.length, "sub-task")}
                         {fund.topPriority && (
-                          <span style={{ color: fund.topPriority.color }}> · ⚑ {fund.topPriority.label}</span>
+                          <span className="fund-item-priority" style={{ "--prio": fund.topPriority.color } as CSSProperties}> · ⚑ {fund.topPriority.label}</span>
                         )}
                         {fund.loadError && <span title="Couldn't load details"> · ⚠</span>}
                       </span>
