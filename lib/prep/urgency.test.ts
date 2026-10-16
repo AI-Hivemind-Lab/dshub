@@ -27,15 +27,15 @@ describe("groupByUrgency", () => {
   it("sorts by earliest due, then name case-insensitively", () => {
     const groups = groupByUrgency(
       [
-        fundDue("w2", "Week B", "2026-06-15"),
-        fundDue("t2", "beta", D),
-        fundDue("w1", "Week A", "2026-06-13"),
-        fundDue("t1", "Alpha", D),
+        fundDue("w2", "Alpha week", "2026-06-15"),
+        fundDue("t2", "alpha", D),
+        fundDue("w1", "Zeta week", "2026-06-13"),
+        fundDue("t1", "Beta", D),
       ],
       D,
     );
-    expect(groups[0].funds.map((f) => f.name)).toEqual(["Alpha", "beta"]);
-    expect(groups[1].funds.map((f) => f.name)).toEqual(["Week A", "Week B"]);
+    expect(groups[0].funds.map((f) => f.name)).toEqual(["alpha", "Beta"]); // case-sensitive ASCII would put "Beta" first
+    expect(groups[1].funds.map((f) => f.name)).toEqual(["Zeta week", "Alpha week"]); // due date beats name
   });
 
   it("drops empty groups and puts funds without due dates in Later", () => {
