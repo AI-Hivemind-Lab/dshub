@@ -30,7 +30,7 @@ v1 said "task status is never displayed". This spec **reverses that**: sub-task 
 
 ```
 ┌───────────────────────────────────────────────────────────────────────┐
-│ Team Hub   ◀ Fri, Oct 16 ▶ [📅] today      updated 3 min ago · ⟳   Toai · Sign out │
+│ Team Hub   ◀ Fri, Oct 16 ▶ today [📅] ⟳      updated 3 min ago     Toai · Sign out │
 ├───────────────────────────────────────────────────────────────────────┤
 │ (banners: error / stale / invalid date / unlinked account)            │
 ├──────────────────────┬────────────────────────────────────────────────┤
@@ -45,8 +45,7 @@ v1 said "task status is never displayed". This spec **reverses that**: sub-task 
 └──────────────────────┴────────────────────────────────────────────────┘
 ```
 
-- **Top bar:** brand; date nav (◀ date ▶, a date-picker form, a "today" chip when viewing today, otherwise a "Jump to today" link); "updated N min ago" (+ " · stale" when stale) and ⟳ Refresh; user name and Sign out.
-- Refresh sits in the date nav, before the "updated N min ago" label.
+- **Top bar:** brand; date nav (◀ date ▶, a "today" chip when viewing today, otherwise a "Jump to today" link, a date-picker form, then ⟳ Refresh); "updated N min ago" (+ " · stale" when stale); user name and Sign out.
 - **Banners:** full width, between the top bar and the panes.
 - **Panes:** at ≥ 900px wide, the list is 300px, sticky, with its own scroll, and the detail panel fills the rest. Below 900px they stack (list on top, then detail).
 - **Empty day:** the existing empty-state copy, centred, in place of both panes.
